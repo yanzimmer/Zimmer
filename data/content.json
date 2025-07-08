@@ -1,0 +1,100 @@
+{
+    "sections": [
+        {
+            "id": "year-grid",
+            "title": "2025 · 每格代表一天",
+            "icon": "fas fa-calendar-alt",
+            "content": "<div class='year-grid-container'><canvas id='yearCanvas'></canvas></div>"
+        },
+        {
+            "title": "开源项目",
+            "icon": "fab fa-github",
+            "cards": [
+                {
+                    "icon": "📝",
+                    "title": "博客",
+                    "description": "记录摸鱼日常",
+                    "link": "https://blog.zimmer.com"
+                },
+                {
+                    "icon": "📚",
+                    "title": "文档站",
+                    "description": "记录学习笔记",
+                    "link": "https://docs.zimmer.com"
+                },
+                {
+                    "icon": "🛠️",
+                    "title": "工具集",
+                    "description": "常用开发工具",
+                    "link": "https://tools.zimmer.com"
+                },
+                {
+                    "icon": "🎨",
+                    "title": "作品集",
+                    "description": "项目展示",
+                    "link": "https://works.zimmer.com"
+                }
+            ]
+        },
+        {
+            "title": "常用链接",
+            "icon": "fas fa-link",
+            "cards": [
+                {
+                    "icon": "💻",
+                    "title": "GitHub",
+                    "description": "代码仓库",
+                    "link": "https://github.com/zimmer"
+                },
+                {
+                    "icon": "📧",
+                    "title": "邮箱",
+                    "description": "联系我",
+                    "link": "mailto:contact@zimmer.com"
+                },
+                {
+                    "icon": "🎯",
+                    "title": "掘金",
+                    "description": "技术文章",
+                    "link": "https://juejin.cn/user/zimmer"
+                },
+                {
+                    "icon": "📱",
+                    "title": "微信",
+                    "description": "私聊交流",
+                    "link": "javascript:showQRCode('微信', 'public/images/wechat-qr.png')"
+                }
+            ]
+        },
+        {
+            "title": "友情链接",
+            "icon": "fas fa-heart",
+            "cards": [
+                {
+                    "icon": "🌐",
+                    "title": "Vue.js",
+                    "description": "渐进式JavaScript框架",
+                    "link": "https://vuejs.org"
+                },
+                {
+                    "icon": "⚛️",
+                    "title": "React",
+                    "description": "用于构建用户界面的库",
+                    "link": "https://reactjs.org"
+                },
+                {
+                    "icon": "🐍",
+                    "title": "Python",
+                    "description": "Python官网",
+                    "link": "https://python.org"
+                },
+                {
+                    "icon": "🐋",
+                    "title": "Docker",
+                    "description": "容器平台",
+                    "link": "https://docker.com"
+                }
+            ]
+        }
+    ]
+} 
