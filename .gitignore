@@ -53,4 +53,8 @@ settings.local.json
 *.gif
 *.ico
 !public/images/
-!public/icons/ 
+!public/icons/
+
+# 图片资源目录
+image/
+images/ 
