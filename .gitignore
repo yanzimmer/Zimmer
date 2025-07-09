@@ -49,12 +49,10 @@ settings.local.json
 # 图片文件
 *.jpg
 *.jpeg
-*.png
+
 *.gif
 *.ico
 !public/images/
 !public/icons/
 
 # 图片资源目录
-image/
-images/ 

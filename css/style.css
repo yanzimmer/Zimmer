@@ -498,7 +498,7 @@ aside {
 /* 默认悬停效果 */
 .avatar-wrapper:hover .avatar {
     transform: scale(1.05);
-}
+    }
 
 /* 音乐播放时禁用默认悬停效果 */
 .avatar-wrapper:hover .beat-container.music-playing .avatar {

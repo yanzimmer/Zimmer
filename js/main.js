@@ -215,12 +215,12 @@ function savePlaybackState() {
     
     // 只在非切换状态时保存进度
     if (!isChangingTrack) {
-        const state = {
-            currentTrackIndex: currentTrackIndex,
-            currentTime: audioPlayer.currentTime,
-            isPlaying: !audioPlayer.paused
-        };
-        localStorage.setItem('musicPlayerState', JSON.stringify(state));
+    const state = {
+        currentTrackIndex: currentTrackIndex,
+        currentTime: audioPlayer.currentTime,
+        isPlaying: !audioPlayer.paused
+    };
+    localStorage.setItem('musicPlayerState', JSON.stringify(state));
     }
 }
 
@@ -272,9 +272,9 @@ async function loadTrack(index, startTime = 0) {
     console.log('%c🎵 正在加载音轨: ' + track.name, consoleStyles.info);
     
     try {
-        audioPlayer = document.getElementById('audio-player');
-        const trackName = document.querySelector('.track-name');
-        
+    audioPlayer = document.getElementById('audio-player');
+    const trackName = document.querySelector('.track-name');
+    
         // 添加音频事件监听
         audioPlayer.addEventListener('play', () => {
             console.log('%c▶️ 音频开始播放', consoleStyles.success);
@@ -321,15 +321,15 @@ async function loadTrack(index, startTime = 0) {
             if (audioPlayer.currentTime >= audioPlayer.duration) {
                 console.log('%c🔄 播放完成，切换下一曲', consoleStyles.info);
                 isChangingTrack = true;
-                try {
-                    await playNext();
+            try {
+                await playNext();
                 } catch (error) {
                     console.log('%c❌ 自动播放下一曲失败: ' + error.message, consoleStyles.error);
                     isPlaying = false;
                     updatePlayButton(false);
                 }
                 isChangingTrack = false;
-            }
+        }
         };
 
     } catch (error) {
@@ -391,7 +391,7 @@ async function playPrev() {
         }
         
         isChangingTrack = true;
-        currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+    currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
         
         console.log('%c⏮️ 切换到上一曲: ' + playlist[currentTrackIndex].name, consoleStyles.info);
         await loadTrack(currentTrackIndex, 0);
@@ -409,7 +409,7 @@ async function playPrev() {
         }
         
         isChangingTrack = false;
-        savePlaybackState();
+    savePlaybackState();
         
     } catch (error) {
         console.log('%c❌ 切换上一曲失败: ' + error.message, consoleStyles.error);
