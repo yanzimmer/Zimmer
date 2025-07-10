@@ -6,7 +6,7 @@
             "label": "微信",
             "qrcode": {
                 "title": "扫描二维码添加微信",
-                "image": "public/images/qrcode.jpg"
+                "image": "public/images/wechat-qr.png"
             }
         },
         {
@@ -15,7 +15,7 @@
             "label": "QQ",
             "qrcode": {
                 "title": "扫描二维码添加QQ",
-                "image": "public/images/qqrcode.jpg"
+                "image": "public/images/qq-qrcode.jpg"
             }
         },
         {
@@ -25,10 +25,16 @@
             "url": "https://github.com/yourusername"
         },
         {
-            "type": "email",
-            "icon": "fas fa-envelope",
-            "label": "Email",
-            "url": "mailto:your.email@example.com"
+            "type": "bilibili",
+            "icon": "fa-brands fa-bilibili",
+            "label": "哔哩哔哩",
+            "url": "https://space.bilibili.com/347537640"
+        },
+        {
+            "type": "settings",
+            "icon": "fas fa-cog",
+            "label": "settings",
+            "url": "http://localhost/edit"
         }
     ]
 } 

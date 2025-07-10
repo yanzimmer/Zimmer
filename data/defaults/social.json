@@ -1,0 +1,34 @@
+{
+    "social_links": [
+        {
+            "type": "wechat",
+            "icon": "fab fa-weixin",
+            "label": "微信",
+            "qrcode": {
+                "title": "扫描二维码添加微信",
+                "image": "public/images/qrcode.jpg"
+            }
+        },
+        {
+            "type": "qq",
+            "icon": "fab fa-qq",
+            "label": "QQ",
+            "qrcode": {
+                "title": "扫描二维码添加QQ",
+                "image": "public/images/qqrcode.jpg"
+            }
+        },
+        {
+            "type": "github",
+            "icon": "fab fa-github",
+            "label": "GitHub",
+            "url": "https://github.com/yourusername"
+        },
+        {
+            "type": "email",
+            "icon": "fas fa-envelope",
+            "label": "Email",
+            "url": "mailto:your.email@example.com"
+        }
+    ]
+} 

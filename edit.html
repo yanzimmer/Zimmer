@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>配置中心</title>
+    <link rel="icon" href="public/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/editor.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs/loader.js"></script>
+</head>
+<body class="theme-dark">
+    <div class="header">
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <div class="toolbar-group">
+                    <select class="file-select" id="fileSelect" onchange="loadFile()">
+                        <option value="content.json">内容配置 (content.json)</option>
+                        <option value="profile.json">个人信息 (profile.json)</option>
+                        <option value="settings.json">页面设置 (settings.json)</option>
+                        <option value="playlist.json">播放列表 (playlist.json)</option>
+                        <option value="social.json">社交链接 (social.json)</option>
+                    </select>
+                </div>
+
+                <div class="toolbar-group">
+                    <button class="btn btn-icon btn-success" onclick="saveChanges()" title="保存">
+                        <i class="fas fa-save"></i>
+                    </button>
+                    <button class="btn btn-icon btn-warning" onclick="loadDefault()" title="恢复默认">
+                        <i class="fas fa-undo"></i>
+                    </button>
+                    <button class="btn btn-icon btn-secondary" onclick="window.location.href='/'" title="返回主页">
+                        <i class="fas fa-home"></i>
+                    </button>
+                </div>
+
+                <div class="toolbar-group">
+                    <input type="file" id="musicUpload" accept=".mp3" style="display: none" 
+                        onchange="handleFileSelect(this)" 
+                        onclick="this.value = null" />
+                    <button class="btn btn-icon btn-primary" onclick="document.getElementById('musicUpload').click()" title="上传音乐">
+                        <i class="fas fa-music"></i>
+                    </button>
+                    <button class="btn btn-icon btn-info" onclick="scanMusic()" title="扫描音乐">
+                        <i class="fas fa-sync"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="toolbar-right">
+                <div class="zoom-controls">
+                    <input type="range" 
+                           id="zoomSlider" 
+                           min="50" 
+                           max="200" 
+                           value="100" 
+                           step="10"
+                           oninput="updateZoomFromSlider(this.value)"
+                           title="调整缩放级别">
+                    <span id="zoomLevel">100%</span>
+                </div>
+
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="themeToggle">
+                        <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+                        <div class="slider round">
+                            <i class="fas fa-sun"></i>
+                            <i class="fas fa-moon"></i>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="editor"></div>
+    <div id="message" class="message"></div>
+    <div id="uploadProgress" class="upload-progress">
+        <div class="progress-bar"></div>
+        <div class="progress-text">0%</div>
+    </div>
+
+    <script src="js/editor.js"></script>
+</body>
+</html> 

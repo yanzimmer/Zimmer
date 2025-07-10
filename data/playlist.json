@@ -2,12 +2,16 @@
     "currentTrack": 0,
     "playlist": [
         {
-            "name": "夜曲-周杰伦",
-            "file": "music/夜曲-周杰伦.mp3"
-        },
-        {
             "name": "暗号-周杰伦",
             "file": "music/暗号-周杰伦.mp3"
+        },
+        {
+            "name": "晴天-周杰伦",
+            "file": "music/晴天-周杰伦.mp3"
+        },
+        {
+            "name": "夜曲-周杰伦",
+            "file": "music/夜曲-周杰伦.mp3"
         }
     ]
 }

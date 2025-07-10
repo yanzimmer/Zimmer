@@ -3,8 +3,12 @@ function initYearGrid() {
     const canvas = document.getElementById('yearCanvas');
     if (!canvas) {
         console.error('Canvas element not found');
-        // 如果找不到canvas元素，等待一段时间后重试
-        setTimeout(initYearGrid, 500);
+        return;
+    }
+
+    const container = canvas.parentElement;
+    if (!container || !container.clientWidth) {
+        console.error('Container not ready');
         return;
     }
 
@@ -20,7 +24,6 @@ function initYearGrid() {
     const cols = Math.ceil(totalDays / rows);
 
     // 根据容器宽度调整格子大小
-    const container = canvas.parentElement;
     const containerWidth = container.clientWidth - 40; // 减去容器内边距
     const containerHeight = container.clientHeight - 40;
 
@@ -101,7 +104,7 @@ function initYearGrid() {
     const blinkInterval = setInterval(() => {
         bright = !bright;
         drawGrid(bright);
-    }, 1000); // 每秒切换一次
+    }, 1000);
 
     // 清理函数
     function cleanup() {
@@ -119,10 +122,30 @@ function initYearGrid() {
 document.addEventListener('themeChanged', initYearGrid);
 
 // 监听窗口大小变化
-window.addEventListener('resize', initYearGrid);
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+    }
+    resizeTimeout = setTimeout(initYearGrid, 250);
+});
 
-// 等待内容加载完成后再初始化
-document.addEventListener('DOMContentLoaded', () => {
-    // 延迟初始化，等待content.js完成内容渲染
-    setTimeout(initYearGrid, 1000);
+// 监听canvas元素的创建
+const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+        if (mutation.type === 'childList') {
+            const canvas = document.getElementById('yearCanvas');
+            if (canvas) {
+                observer.disconnect();
+                initYearGrid();
+                break;
+            }
+        }
+    }
+});
+
+// 开始监听DOM变化
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
 }); 

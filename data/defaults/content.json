@@ -1,0 +1,102 @@
+{
+  "sections": [
+    {
+      "id": "year-grid",
+      "title": "2025 · 每格代表一天",
+      "icon": "fas fa-calendar-alt"
+    },
+    {
+      "title": "开源项目",
+      "icon": "fab fa-github",
+      "cards": [
+        {
+          "icon": "📝",
+          "title": "博客",
+          "link": "https://blog.zimmer.com"
+        },
+        {
+          "icon": "📚",
+          "title": "文档站",
+          "link": "https://docs.zimmer.com"
+        },
+        {
+          "icon": "🛠️",
+          "title": "工具集",
+          "link": "https://tools.zimmer.com"
+        },
+        {
+          "icon": "🎨",
+          "title": "作品集",
+          "link": "https://works.zimmer.com"
+        }
+      ]
+    },
+    {
+      "title": "常用链接",
+      "icon": "fas fa-link",
+      "cards": [
+        {
+          "icon": "💻",
+          "title": "GitHub",
+          "link": "https://github.com/zimmer"
+        },
+        {
+          "icon": "💻",
+          "title": "GitHub",
+          "link": "https://github.com/zimmer"
+        },
+        {
+          "icon": "💻",
+          "title": "GitHub",
+          "link": "https://github.com/zimmer"
+        },
+        {
+          "icon": "💻",
+          "title": "GitHub",
+          "link": "https://github.com/zimmer"
+        },
+        {
+          "icon": "📧",
+          "title": "邮箱",
+          "link": "mailto:contact@zimmer.com"
+        },
+        {
+          "icon": "🎯",
+          "title": "掘金",
+          "link": "https://juejin.cn/user/zimmer"
+        },
+        {
+          "icon": "📱",
+          "title": "微信",
+          "link": "javascript:showQRCode('微信', 'public/images/wechat-qr.png')"
+        }
+      ]
+    },
+    {
+      "title": "友情链接",
+      "icon": "fas fa-heart",
+      "cards": [
+        {
+          "icon": "🌐",
+          "title": "Vue.js",
+          "link": "https://vuejs.org"
+        },
+        {
+          "icon": "⚛️",
+          "title": "React",
+          "link": "https://reactjs.org"
+        },
+        {
+          "icon": "🐍",
+          "title": "Python",
+          "link": "https://python.org"
+        },
+        {
+          "icon": "🐋",
+          "title": "Docker",
+          "link": "https://docker.com"
+        }
+      ]
+    }
+  ]
+}

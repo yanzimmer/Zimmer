@@ -1,8 +1,11 @@
 {
     "profile": {
-        "title": "Zimmer Yan - 个人主页",
+        "title": "Zimmer Yan",
         "name": "从浓烈到悄无声息",
         "avatar": "public/images/avatar2.jpeg",
+        "favicon": {
+            "svg": "public/favicon.svg"
+        },
         "location": "中国-杭州",
         "skills": [
             "JavaScript",
@@ -12,28 +15,6 @@
             "Node.js",
             "Python",
             "Docker"
-        ],
-        "social": {
-            "qq": {
-                "icon": "fab fa-qq",
-                "qrcode": "public/images/qq-qrcode.jpg"
-            },
-            "wechat": {
-                "icon": "fab fa-weixin",
-                "qrcode": "public/images/wechat-qr.png"
-            },
-            "bilibili": {
-                "icon": "fa-brands fa-bilibili",
-                "url": "https://space.bilibili.com/your-id"
-            },
-            "github": {
-                "icon": "fab fa-github",
-                "url": "https://github.com/yourusername"
-            },
-            "email": {
-                "icon": "fas fa-envelope",
-                "url": "mailto:your.email@example.com"
-            }
-        }
+        ]
     }
-} 
+}

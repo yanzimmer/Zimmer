@@ -1,0 +1,20 @@
+{
+    "profile": {
+        "title": "Zimmer Yan - 个人主页",
+        "name": "从浓烈到悄无声息",
+        "avatar": "public/images/avatar2.jpeg",
+        "favicon": {
+            "svg": "public/favicon.svg"
+        },
+        "location": "中国-杭州",
+        "skills": [
+            "JavaScript",
+            "TypeScript",
+            "React",
+            "Vue",
+            "Node.js",
+            "Python",
+            "Docker"
+        ]
+    }
+} 

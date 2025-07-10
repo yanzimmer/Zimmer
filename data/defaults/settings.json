@@ -1,0 +1,16 @@
+{
+    "default": {
+        "foregroundBlur": 5,
+        "blur": 9,
+        "zoom": 150,
+        "positionY": 25,
+        "positionX": 50
+    },
+    "user": {
+        "foregroundBlur": 0,
+        "blur": 10,
+        "zoom": 140,
+        "positionY": 17,
+        "positionX": 52
+    }
+}

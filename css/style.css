@@ -10,6 +10,8 @@
     --primary-light: #6366f1;
     --secondary-light: #818cf8;
     --bg-blur-light: rgba(255, 255, 255, 0.5);
+    --scrollbar-light: rgba(255, 255, 255, 0.2);
+    --scrollbar-hover-light: rgba(255, 255, 255, 0.3);
 
     /* 暗色主题 */
     --bg-dark: #000000;
@@ -21,6 +23,8 @@
     --primary-dark: #818cf8;
     --secondary-dark: #a5b4fc;
     --bg-blur-dark: rgba(0, 0, 0, 0.5);
+    --scrollbar-dark: rgba(255, 255, 255, 0.1);
+    --scrollbar-hover-dark: rgba(255, 255, 255, 0.2);
 
     /* 通用变量 */
     --sidebar-width: 440px;
@@ -52,6 +56,8 @@
     --bg-blur: var(--bg-blur-light);
     --accent: var(--text-light);
     --accent-alpha: rgba(0, 0, 0, 0.5);
+    --scrollbar: var(--scrollbar-light);
+    --scrollbar-hover: var(--scrollbar-hover-light);
 }
 
 .dark {
@@ -66,6 +72,34 @@
     --bg-blur: var(--bg-blur-dark);
     --accent: var(--text-dark);
     --accent-alpha: rgba(255, 255, 255, 0.5);
+    --scrollbar: var(--scrollbar-dark);
+    --scrollbar-hover: var(--scrollbar-hover-dark);
+}
+
+/* 自定义滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-hover);
+}
+
+/* Firefox 滚动条样式 */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar) transparent;
 }
 
 /* 基础样式 */
@@ -77,6 +111,23 @@
 
 html {
     height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--text);
+    min-height: 100%;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    animation: pageLoad 0.5s ease-in forwards;
+    overflow-x: hidden;
 }
 
 /* 背景容器 */
@@ -87,34 +138,51 @@ html {
     width: 100%;
     height: 100%;
     z-index: -2;
-    background-color: var(--bg);
-    opacity: 0;
-    animation: fadeIn 1s ease-out forwards;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 1;
+    overflow: hidden; /* 防止背景溢出 */
 }
 
 .bg-image {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: -5%; /* 稍微扩展以防止边缘露出 */
+    left: -5%;
+    width: 110%; /* 稍微扩展以防止边缘露出 */
+    height: 110%;
     z-index: -1;
     background-image: url('/public/images/background.jpg');
     background-size: var(--zoom-amount, 150%);
     background-position: center;
     background-repeat: no-repeat;
     opacity: 0;
-    transform: scale(1.1);
+    transform: scale(1.05);
     filter: blur(var(--blur-amount, 9px));
-    animation: bgReveal 1.2s ease-out forwards;
+    animation: bgReveal 1s ease-out forwards;
+}
+
+/* 页面加载动画 */
+@keyframes pageLoad {
+    from {
+        opacity: 0;
+        background-color: rgba(0, 0, 0, 0.85);  /* 稍微透明的黑色 */
+        backdrop-filter: blur(8px);
+    }
+    to {
+        opacity: 1;
+        background-color: var(--bg);
+        backdrop-filter: blur(0px);  /* 过渡到无模糊 */
+    }
 }
 
 /* 背景动画 */
 @keyframes bgReveal {
     0% {
         opacity: 0;
-        transform: scale(1.1);
-        filter: blur(calc(var(--blur-amount, 9px) + 10px));
+        transform: scale(1.05); /* 减小初始缩放值 */
+        filter: blur(calc(var(--blur-amount, 9px) + 5px));
+        background-color: #000;  /* 从黑色开始 */
     }
     100% {
         opacity: 1;
@@ -123,44 +191,34 @@ html {
     }
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    line-height: 1.6;
-    color: var(--text);
-    min-height: 100%;
-    position: relative;
-    background-color: var(--bg);
-}
-
 body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: var(--bg);
+    background: rgba(0, 0, 0, 0.85);  /* 稍微透明的黑色 */
+    backdrop-filter: blur(8px);  /* 添加毛玻璃效果 */
+    -webkit-backdrop-filter: blur(8px);
     opacity: 0;
     z-index: 0;
     pointer-events: none;
-    animation: overlayFade 1.5s ease-out forwards;
+    animation: overlayFade 0.8s ease-out forwards;
 }
 
 @keyframes overlayFade {
     0% {
         opacity: 0;
+        background-color: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
     }
-    50% {
+    30% {
         opacity: 0;
+        background-color: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
     }
     100% {
         opacity: 0.95;
+        background-color: var(--bg);
+        backdrop-filter: blur(0px);
     }
 }
 
@@ -307,40 +365,47 @@ body::before {
 /* 链接卡片样式 */
 .links-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin-bottom: 25px;  /* 增加底部间距 */
+    grid-template-columns: repeat(8, 1fr);  /* 修改为8列 */
+    gap: 10px;  /* 减小间距 */
+    margin-bottom: 25px;
     padding: 0;
 }
 
 .links-container a {
     text-decoration: none;
     color: var(--text);
-    padding: 20px;
+    padding: 3px;  /* 极小的内边距 */
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 2px;  /* 极小的间距 */
 }
 
 .card-icon {
-    font-size: 24px;
-    width: 40px;
-    height: 40px;
+    font-size: clamp(8px, 0.5vw, 10px);  /* 显著减小图标 */
+    width: clamp(12px, 0.8vw, 16px);  /* 显著减小容器 */
+    height: clamp(12px, 0.8vw, 16px);
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    border-radius: 2px;
+    padding: 1px;  /* 极小的内边距 */
 }
 
 .card-content {
     flex: 1;
+    min-width: 0;
+    padding: 0 1px;  /* 极小的内边距 */
 }
 
 .card-content h3 {
     margin: 0;
-    font-size: 16px;
-    font-weight: 500;
+    font-size: clamp(6px, 0.5vw, 8px);  /* 显著减小文字 */
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1;  /* 最小行高 */
 }
 
 .card-content p {
@@ -349,15 +414,96 @@ body::before {
     opacity: 0.8;
 }
 
-/* 布局 */
+/* 布局容器 */
 .container {
-    max-width: 1800px;
-    margin: 0 auto;
-    padding: 4rem 2rem 2rem 2rem;
     display: flex;
     gap: 2rem;
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 4rem 2rem 2rem 2rem;
     position: relative;
     z-index: 1;
+    min-height: 100vh;
+}
+
+/* 侧边栏 */
+aside {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* 主内容区 */
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 2rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 1400px) {
+    .container {
+        max-width: 100%;
+        padding: 3rem 1rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        padding: 2rem 1rem;
+    }
+
+    aside {
+        width: 100%;
+        min-width: auto;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 1rem;
+        position: relative;
+        top: 0;
+    }
+
+    .about-section {
+        max-width: 100%;
+        margin: 0 auto 1.5rem;
+    }
+
+    .nav-links {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-link {
+        flex: 1;
+        min-width: 120px;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        flex-direction: column;
+    }
+
+    aside {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .main-content {
+        padding: 1rem;
+        margin-top: 1rem;
+    }
 }
 
 /* 主题切换按钮 */
@@ -419,16 +565,6 @@ body::before {
 }
 
 /* 左侧信息栏样式 */
-aside {
-    width: var(--sidebar-width);
-    min-width: var(--sidebar-width);
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-/* 头像容器 */
 .avatar-wrapper {
     width: 240px;
     height: 240px;
@@ -448,6 +584,8 @@ aside {
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     z-index: 0;
+    transition: transform 0.3s ease;
+    transform-origin: center;
 }
 
 /* 旋转动画容器 */
@@ -480,13 +618,30 @@ aside {
     z-index: 1;
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: transform 0.3s ease;
+    transform-origin: center;
 }
 
-/* 头像旋转动画 */
-@keyframes rotate-avatar {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+/* 耳机装饰 */
+.headphone-decoration {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    border-bottom: none;
+    pointer-events: none;
+    z-index: 2;
+    transition: transform 0.3s ease;
+    transform-origin: center;
 }
+
+/* 默认悬停效果 */
+.avatar-wrapper:hover .beat-container:not(.music-playing) .avatar,
+.avatar-wrapper:hover .beat-container:not(.music-playing) .headphone-decoration {
+    transform: scale(1.05);
+    }
 
 /* 音乐律动动画 */
 @keyframes music-beat {
@@ -495,32 +650,33 @@ aside {
     100% { transform: scale(1); }
 }
 
-/* 默认悬停效果 */
-.avatar-wrapper:hover .avatar {
-    transform: scale(1.05);
-    }
-
-/* 音乐播放时禁用默认悬停效果 */
-.avatar-wrapper:hover .beat-container.music-playing .avatar {
-    transform: none;
-}
-
-/* 旋转动画 */
-.rotation-container.rotating {
-    animation: rotate-avatar 8s linear infinite;
-}
-
 /* 律动动画 */
-.beat-container.music-playing {
+.beat-container.music-playing,
+.beat-container.music-playing .avatar,
+.beat-container.music-playing .headphone-decoration {
     animation: music-beat 3s ease-in-out infinite;
 }
 
 /* 音乐播放时的悬停暂停效果 */
-.avatar-wrapper:hover .rotation-container.rotating {
+.avatar-wrapper:hover .beat-container.music-playing,
+.avatar-wrapper:hover .beat-container.music-playing .avatar,
+.avatar-wrapper:hover .beat-container.music-playing .headphone-decoration {
     animation-play-state: paused;
 }
 
-.avatar-wrapper:hover .beat-container.music-playing {
+/* 旋转动画 */
+@keyframes rotate-avatar {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 旋转容器动画 */
+.rotation-container.rotating {
+    animation: rotate-avatar 8s linear infinite;
+}
+
+/* 旋转暂停效果 */
+.avatar-wrapper:hover .rotation-container.rotating {
     animation-play-state: paused;
 }
 
@@ -979,18 +1135,21 @@ aside {
 @media (max-width: 1024px) {
     .container {
         flex-direction: column;
-        padding: 3rem 1rem 1rem 1rem;
+        padding: 2rem 1rem;
     }
 
     aside {
         width: 100%;
         min-width: auto;
-        max-width: 700px;
+        max-width: 100%;
         margin: 0 auto;
+        padding: 1rem;
+        position: relative;
+        top: 0;
     }
 
     .about-section {
-        max-width: 600px;
+        max-width: 100%;
         margin: 0 auto 1.5rem;
     }
 
@@ -1011,6 +1170,17 @@ aside {
     .container {
         padding: 1rem;
         flex-direction: column;
+    }
+
+    aside {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .main-content {
+        padding: 1rem;
+        margin-top: 1rem;
     }
 
     .section {
@@ -1046,14 +1216,14 @@ aside {
         height: 80px;
     }
 
-    aside {
-        width: 100%;
-        padding: 1rem;
+    .links-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
     }
 
-    .main-content {
-        padding: 20px 15px;
-        margin-top: 20px;
+    .weather-icon {
+        width: 80px;
+        height: 80px;
     }
 }
 
@@ -1446,7 +1616,10 @@ aside {
 .music-player {
     padding: 15px;
     margin-top: 20px;
+    margin-bottom: 20px;
     background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
 }
 
 .music-player .track-name {
@@ -1632,4 +1805,52 @@ aside {
     font-weight: bold;
     font-style: normal;
     font-family: "Arial", sans-serif;
+} 
+
+/* 响应式布局 */
+@media (max-width: 1600px) {
+    .links-container {
+        grid-template-columns: repeat(6, 1fr);  /* 1600px以下显示6列 */
+    }
+}
+
+@media (max-width: 1200px) {
+    .links-container {
+        grid-template-columns: repeat(4, 1fr);  /* 1200px以下显示4列 */
+    }
+}
+
+@media (max-width: 992px) {
+    .links-container {
+        grid-template-columns: repeat(3, 1fr);  /* 992px以下显示3列 */
+    }
+}
+
+@media (max-width: 768px) {
+    .links-container {
+        grid-template-columns: repeat(2, 1fr);  /* 768px以下显示2列 */
+        margin-left: 1rem;
+        margin-right: 1rem;
+        margin-top: 0.4rem;
+        margin-bottom: 0.4rem;
+        gap: 8px;
+        width: calc(100% - 2rem);
+    }
+    
+    .card-icon {
+        font-size: 8px;
+        width: 12px;
+        height: 12px;
+        padding: 1px;
+    }
+    
+    .card-content h3 {
+        font-size: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .links-container {
+        grid-template-columns: repeat(1, 1fr);  /* 480px以下显示1列 */
+    }
 } 

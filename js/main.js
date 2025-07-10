@@ -137,29 +137,14 @@ const rotationContainer = document.querySelector('.rotation-container');
 const beatContainer = document.querySelector('.beat-container');
 
 function updateAvatarAnimation(playing) {
-    console.log('%c🎵 更新头像动画状态', consoleStyles.info);
-    console.log('%c当前播放状态:', consoleStyles.info, playing);
-    
     // 根据音乐播放状态控制动画
     if (playing) {
         rotationContainer.classList.add('rotating');
         beatContainer.classList.add('music-playing');
-        console.log('%c添加旋转和律动动画', consoleStyles.success);
     } else {
         rotationContainer.classList.remove('rotating');
         beatContainer.classList.remove('music-playing');
-        console.log('%c移除所有动画', consoleStyles.warning);
     }
-    
-    // 输出调试信息
-    console.log('%c旋转容器类列表:', consoleStyles.info, rotationContainer.classList.toString());
-    console.log('%c律动容器类列表:', consoleStyles.info, beatContainer.classList.toString());
-    
-    // 检查计算后的样式
-    const rotationStyle = window.getComputedStyle(rotationContainer);
-    const beatStyle = window.getComputedStyle(beatContainer);
-    console.log('%c旋转动画:', consoleStyles.info, rotationStyle.animation);
-    console.log('%c律动动画:', consoleStyles.info, beatStyle.animation);
 }
 
 // 打印欢迎信息
@@ -173,13 +158,19 @@ console.log('\n');
 async function loadPlaylist() {
     try {
         console.log('%c🎵 正在加载播放列表...', consoleStyles.info);
-        const response = await fetch('data/playlist.json');
+        const response = await fetch('/api/music-list'); // 使用新的API端点
         const data = await response.json();
         playlist = data.playlist;
         
         // 从 localStorage 恢复播放状态
         const savedState = JSON.parse(localStorage.getItem('musicPlayerState') || '{}');
         currentTrackIndex = savedState.currentTrackIndex || 0;
+        
+        // 确保 currentTrackIndex 在有效范围内
+        if (currentTrackIndex >= playlist.length) {
+            currentTrackIndex = 0;
+        }
+        
         const currentTime = savedState.currentTime || 0;
         isPlaying = savedState.isPlaying || false;
 
@@ -200,14 +191,57 @@ async function loadPlaylist() {
                 updatePlayButton(false);
             }
         }
-
-        // 每2秒保存一次播放状态
-        setInterval(savePlaybackState, 2000);
-
     } catch (error) {
         console.log('%c❌ 加载播放列表失败: ' + error.message, consoleStyles.error);
     }
 }
+
+// 定期检查播放列表更新
+async function checkPlaylistUpdates() {
+    try {
+        const response = await fetch('/api/music-list');
+        const data = await response.json();
+        const newPlaylist = data.playlist;
+        
+        // 检查播放列表是否有变化
+        if (JSON.stringify(newPlaylist) !== JSON.stringify(playlist)) {
+            console.log('%c🔄 播放列表有更新，正在重新加载...', consoleStyles.warning);
+            
+            // 保存当前播放的歌曲名称
+            const currentTrackName = playlist[currentTrackIndex]?.name;
+            
+            // 更新播放列表
+            playlist = newPlaylist;
+            
+            // 尝试找到之前播放的歌曲在新列表中的位置
+            if (currentTrackName) {
+                const newIndex = playlist.findIndex(track => track.name === currentTrackName);
+                if (newIndex !== -1) {
+                    currentTrackIndex = newIndex;
+                } else {
+                    // 如果找不到之前的歌曲，重置到第一首
+                    currentTrackIndex = 0;
+                    if (isPlaying) {
+                        await loadTrack(currentTrackIndex, 0);
+                        if (hasUserInteracted) {
+                            await audioPlayer.play();
+                        }
+                    }
+                }
+            }
+            
+            // 保存新的状态
+            savePlaybackState();
+        }
+    } catch (error) {
+        console.log('%c❌ 检查播放列表更新失败: ' + error.message, consoleStyles.error);
+    }
+}
+
+// 启动定期检查
+const PLAYLIST_CHECK_INTERVAL = 3200 * 1000; // 60秒
+console.log('%c⏱️ 设置播放列表检查间隔: 60秒', consoleStyles.info);
+setInterval(checkPlaylistUpdates, PLAYLIST_CHECK_INTERVAL);
 
 // 保存播放状态
 function savePlaybackState() {
@@ -215,12 +249,12 @@ function savePlaybackState() {
     
     // 只在非切换状态时保存进度
     if (!isChangingTrack) {
-    const state = {
-        currentTrackIndex: currentTrackIndex,
-        currentTime: audioPlayer.currentTime,
-        isPlaying: !audioPlayer.paused
-    };
-    localStorage.setItem('musicPlayerState', JSON.stringify(state));
+        const state = {
+            currentTrackIndex: currentTrackIndex,
+            currentTime: audioPlayer.currentTime,
+            isPlaying: !audioPlayer.paused
+        };
+        localStorage.setItem('musicPlayerState', JSON.stringify(state));
     }
 }
 
@@ -298,7 +332,14 @@ async function loadTrack(index, startTime = 0) {
         audioPlayer.ontimeupdate = null;
         audioPlayer.onended = null;
         
-        audioPlayer.src = track.file;
+        // 处理文件路径，直接使用文件名
+        const originalPath = '/music/' + track.file.replace(/^music\//, '');
+        const musicPath = '/music/' + encodeURIComponent(track.file.replace(/^music\//, ''));
+        console.log('%c🎵 音乐文件路径:', consoleStyles.info);
+        console.log('%c   原始路径: ' + originalPath, consoleStyles.info);
+        console.log('%c   编码路径: ' + musicPath, consoleStyles.info);
+        
+        audioPlayer.src = musicPath;
         trackName.textContent = track.name;
         
         document.querySelector('.progress').style.width = '0%';
@@ -532,11 +573,14 @@ async function renderProfile() {
     }
 }
 
+// 获取当前域名和端口
+const API_BASE_URL = window.location.origin;
+
 // 加载控制面板设置
 async function loadControlSettings() {
     try {
         // 从服务器加载设置
-        const response = await fetch('http://localhost:3000/api/settings');
+        const response = await fetch(`${API_BASE_URL}/api/settings`);
         const settings = await response.json();
         const userSettings = settings.user;
         
@@ -564,7 +608,7 @@ async function loadControlSettings() {
 async function saveControlSettings() {
     try {
         // 先获取当前的设置
-        const response = await fetch('http://localhost:3000/api/settings');
+        const response = await fetch(`${API_BASE_URL}/api/settings`);
         const settings = await response.json();
         
         // 更新用户设置
@@ -577,7 +621,7 @@ async function saveControlSettings() {
         };
 
         // 保存到服务器
-        const saveResponse = await fetch('http://localhost:3000/api/settings', {
+        const saveResponse = await fetch(`${API_BASE_URL}/api/settings`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -622,7 +666,7 @@ positionXRange.addEventListener('input', debouncedSave);
 async function resetToDefault() {
     try {
         // 从服务器加载设置
-        const response = await fetch('http://localhost:3000/api/settings');
+        const response = await fetch('http://localhost/api/settings');
         const settings = await response.json();
         const defaultSettings = settings.default;
 
@@ -860,5 +904,33 @@ async function loadProfile() {
 document.addEventListener('DOMContentLoaded', () => {
     loadProfile();  // 加载所有个人资料信息
     setupQRModal();
-    // ... existing code ...
+}); 
+
+// 设置网页图标
+async function setFavicon() {
+    try {
+        const response = await fetch('data/profile.json');
+        const data = await response.json();
+        const favicon = data.profile.favicon;
+
+        // 移除现有的图标
+        const existingIcons = document.querySelectorAll('link[rel*="icon"]');
+        existingIcons.forEach(icon => icon.remove());
+
+        // 添加SVG图标
+        if (favicon.svg) {
+            const svgIcon = document.createElement('link');
+            svgIcon.rel = 'icon';
+            svgIcon.type = 'image/svg+xml';
+            svgIcon.href = favicon.svg;
+            document.head.appendChild(svgIcon);
+        }
+    } catch (error) {
+        console.error('设置网页图标失败:', error);
+    }
+}
+
+// 在页面加载时设置图标
+document.addEventListener('DOMContentLoaded', () => {
+    setFavicon();
 }); 
